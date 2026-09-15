@@ -2,392 +2,762 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Swiss Virology Meeting</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
     <style>
-    h2{border-bottom: 1px solid #eee;padding-bottom: 9px;}
-    .sidebar{position: fixed;top:100px;left:50px;}
+      :root{
+        --paper:#f6f7f5;
+        --card:#ffffff;
+        --ink:#12211f;
+        --teal:#0f4c4a;
+        --teal-soft:#e3ecea;
+        --accent:#c23a22;
+        --amber-bg:#fdf3dc;
+        --amber-line:#e0a700;
+        --muted:#5f7370;
+        --line:rgba(18,33,31,.14);
+        --measure:68ch;
+      }
+
+      *{box-sizing:border-box;}
+
+      html{scroll-behavior:smooth;scroll-padding-top:104px;}
+      @media (prefers-reduced-motion: reduce){
+        html{scroll-behavior:auto;}
+      }
+
+      body{
+        margin:0;
+        background:var(--paper);
+        color:var(--ink);
+        font-family:"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        font-size:17px;
+        line-height:1.6;
+        -webkit-font-smoothing:antialiased;
+      }
+
+      a{color:var(--teal);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;}
+      a:hover{color:var(--accent);}
+      a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+
+      .wrap{max-width:1000px;margin:0 auto;padding:0 28px;}
+
+      /* ---------- masthead ---------- */
+      .topbar{
+        position:sticky;top:0;z-index:50;
+        background:rgba(246,247,245,.94);
+        backdrop-filter:saturate(140%) blur(8px);
+        border-bottom:1px solid var(--line);
+      }
+      .topbar .wrap{
+        display:flex;align-items:center;justify-content:space-between;
+        gap:20px;min-height:62px;flex-wrap:wrap;
+      }
+      .wordmark{
+        font-size:15px;font-weight:600;letter-spacing:-.01em;
+        color:var(--ink);text-decoration:none;white-space:nowrap;
+      }
+      .wordmark:hover{color:var(--ink);}
+      .nav{display:flex;flex-wrap:wrap;gap:4px 2px;list-style:none;margin:0;padding:0;}
+      .nav a{
+        display:block;padding:6px 11px;border-radius:999px;
+        font-size:14.5px;color:var(--muted);text-decoration:none;
+      }
+      .nav a:hover{background:var(--teal-soft);color:var(--teal);}
+
+      /* ---------- hero ---------- */
+      .hero{
+        border-bottom:1px solid var(--line);
+        background:linear-gradient(180deg, rgba(227,236,234,.55), rgba(246,247,245,0));
+      }
+      .hero .wrap{
+        display:flex;align-items:center;gap:40px;flex-wrap:wrap;
+        padding-top:52px;padding-bottom:52px;
+      }
+      .hero-logo img{width:170px;height:auto;display:block;}
+      .hero-text h1{
+        margin:0;
+        font-size:clamp(30px,5vw,46px);
+        line-height:1.05;letter-spacing:-.03em;font-weight:600;
+      }
+      .hero-rule{
+        width:64px;height:3px;background:var(--accent);
+        margin:18px 0 14px;border-radius:2px;
+      }
+      .hero-text .contact{margin:0;color:var(--muted);font-size:15.5px;}
+
+      /* ---------- sections ---------- */
+      section{padding:64px 0 8px;}
+      section + section{padding-top:56px;}
+
+      .section-title{
+        margin:0 0 34px;
+        line-height:1.2;letter-spacing:-.02em;font-weight:600;
+        color:var(--teal);
+        padding-bottom:12px;
+        border-bottom:2px solid var(--teal);
+      }
+      h2.section-title{font-size:clamp(22px,3.2vw,30px);}
+      h1.section-title{font-size:clamp(26px,4vw,34px);letter-spacing:-.025em;}
+
+      h3.sub{
+        margin:44px 0 14px;
+        font-size:19px;font-weight:600;letter-spacing:-.01em;
+      }
+      h3.sub:first-of-type{margin-top:0;}
+
+      p{max-width:var(--measure);}
+
+      .lead p{margin:0 0 18px;}
+      .signoff{margin-top:26px;}
+
+      /* ---------- people lists ---------- */
+      .people-block{
+        margin:26px 0 0;
+        padding:22px 24px;
+        background:var(--card);
+        border:1px solid var(--line);
+        border-left:3px solid var(--teal);
+        border-radius:3px;
+        max-width:var(--measure);
+      }
+      .people-block h4{
+        margin:0 0 4px;font-size:13px;font-weight:600;
+        letter-spacing:.02em;color:var(--teal);
+      }
+      .people-block h4 small{font-weight:400;color:var(--muted);}
+      .people{
+        list-style:none;margin:12px 0 0;padding:0;
+        display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:2px 24px;font-size:14.5px;
+      }
+      @media (max-width:620px){.people{grid-template-columns:1fr;}}
+
+      /* ---------- facts ---------- */
+      .facts{
+        margin:0;display:grid;
+        grid-template-columns:150px minmax(0,1fr);
+        border-top:1px solid var(--line);
+      }
+      .facts dt{
+        padding:12px 16px 12px 0;
+        font-weight:600;font-size:15px;color:var(--teal);
+        border-bottom:1px solid var(--line);
+      }
+      .facts dd{
+        margin:0;padding:12px 0;
+        border-bottom:1px solid var(--line);
+      }
+      .facts .note{color:var(--muted);font-size:15px;}
+      @media (max-width:620px){
+        .facts{grid-template-columns:1fr;}
+        .facts dt{padding-bottom:0;border-bottom:0;}
+        .facts dd{padding-top:4px;}
+      }
+
+      .plain{list-style:none;margin:0;padding:0;max-width:var(--measure);}
+      .plain li{padding:9px 0;border-bottom:1px solid var(--line);}
+      .plain li:first-child{border-top:1px solid var(--line);}
+
+      /* ---------- programme ---------- */
+      .day{
+        margin:0 0 18px;
+        font-size:20px;font-weight:600;letter-spacing:-.01em;
+        color:var(--ink);
+      }
+      .schedule{
+        display:grid;
+        grid-template-columns:118px minmax(0,1fr);
+        border-top:1px solid var(--line);
+        margin-bottom:56px;
+      }
+      .slot{display:contents;}
+      .slot .time{
+        font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size:13.5px;font-variant-numeric:tabular-nums;
+        color:var(--muted);
+        padding:16px 18px 16px 0;
+        border-bottom:1px solid var(--line);
+        white-space:nowrap;
+      }
+      .slot .detail{
+        padding:16px 0 16px 20px;
+        border-bottom:1px solid var(--line);
+        border-left:1px solid var(--line);
+      }
+      .detail .name{font-weight:600;}
+      .detail .affil{color:var(--muted);font-style:italic;}
+      .detail .abstract-nr{color:var(--muted);font-size:14.5px;}
+      .detail .title{margin:3px 0 0;max-width:60ch;}
+      .detail .meta{margin:4px 0 0;color:var(--muted);font-size:14.5px;max-width:60ch;}
+
+      .slot.session .time{color:var(--accent);font-weight:500;background:rgba(194,58,34,.05);}
+      .slot.session .detail{background:rgba(194,58,34,.05);border-left-color:var(--accent);}
+      .session-name{font-weight:600;color:var(--accent);font-size:16.5px;}
+
+      .slot.break .time{background:var(--amber-bg);color:#8a6a00;}
+      .slot.break .detail{background:var(--amber-bg);border-left-color:var(--amber-line);}
+      .slot.break .what{font-weight:500;}
+
+      @media (max-width:620px){
+        .schedule{grid-template-columns:1fr;}
+        .slot .time{padding:14px 0 0;border-bottom:0;}
+        .slot .detail{padding:4px 0 16px;border-left:0;}
+        .slot.session .time,.slot.break .time{padding:12px 14px 0;}
+        .slot.session .detail,.slot.break .detail{padding-left:14px;padding-right:14px;}
+      }
+
+      /* ---------- registration ---------- */
+      .reg-card{
+        background:var(--card);
+        border:1px solid var(--line);
+        border-top:3px solid var(--accent);
+        border-radius:3px;
+        padding:28px;
+        max-width:var(--measure);
+      }
+      .reg-card p:last-child{margin-bottom:0;}
+      .btn{
+        display:inline-block;margin:6px 0 20px;
+        padding:12px 26px;border-radius:3px;
+        background:var(--accent);color:#fff;text-decoration:none;
+        font-weight:600;font-size:16px;
+      }
+      .btn:hover{background:#a72e18;color:#fff;}
+      .fallback{color:var(--muted);font-size:14.5px;}
+      .fallback code{
+        font-family:"IBM Plex Mono", monospace;font-size:13px;
+        word-break:break-all;color:var(--muted);
+      }
+      .deadline{
+        margin-top:22px;padding:14px 18px;
+        background:var(--amber-bg);
+        border-left:3px solid var(--amber-line);
+        border-radius:3px;
+        max-width:var(--measure);
+        font-size:15.5px;
+      }
+
+      /* ---------- previous meetings ---------- */
+      .archive{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+        gap:18px;list-style:none;margin:0;padding:0;
+      }
+      .archive a{
+        display:block;background:var(--card);
+        border:1px solid var(--line);border-radius:3px;padding:14px;
+      }
+      .archive a:hover{border-color:var(--accent);}
+      .archive img{width:100%;height:auto;display:block;}
+
+      footer.page-foot{
+        margin-top:72px;padding:28px 0 60px;
+        border-top:1px solid var(--line);
+        color:var(--muted);font-size:14.5px;
+      }
+      footer.page-foot .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
     </style>
-
-    
-    
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
+
   <body>
-     <div class="container">
-      <div class="header" style="margin-bottom:100px;">
-        <ul class="nav nav-pills pull-right">
-           <li><a href="/#welcome">Welcome</a></li>
-           <li><a href="/#general">General information</a></li>
-           <li><a href="/#program">Program</a></li>
-           <li><img src="/11th SVM logo.png" height="150" style="position:absolute;top:40px;;"/></li>
-           <li><a href="/#registration">Registration</a></li>
-           <li><a href="/#previous">Previous meetings</a></li>
-           <li ><a href="/2025_Sponsors.pdf">Sponsors</a></li>
-        </ul>
-        <h3 class="text-muted">Swiss Virology Meeting</h3>
-        Contact: contact@swissvirology.ch
+    <header class="topbar">
+      <div class="wrap">
+        <a class="wordmark" href="/">Swiss Virology Meeting</a>
+        <nav aria-label="Sections">
+          <ul class="nav">
+            <li><a href="/#welcome">Welcome</a></li>
+            <li><a href="/#general">General information</a></li>
+            <li><a href="/#program">Program</a></li>
+            <li><a href="/#registration">Registration</a></li>
+            <li><a href="/#previous">Previous meetings</a></li>
+            <li><a href="/2025_Sponsors.pdf">Sponsors</a></li>
+          </ul>
+        </nav>
       </div>
+    </header>
 
-
-      <div class="row">
-
-<div class="col-md-12" role="main">
-
-<h1 id="welcome" class="bg-info">Welcome!</h1>
-                <!-- <div style="margin-left:200px; margin-right:auto;"><img  src="assets/images/logo.png"/></div> -->
-
-        <p>Dear Colleagues,<br/>
-
-        <p>On behalf of the Organizing Committee, we cordially invite you to participate to the 11th Swiss Virology Meeting that will be held from January 26<sup>th</sup> to January 27<sup>th</sup>, 2027 at the <a href="https://fassbindhotels.ch/fr/hotel/ambassador-spa-bern/"> Ambassador Hotel</a> in Bern, Switzerland.</p>
-
-        <p>The goal of this eleventh national meeting in virology is again to bring together in Switzerland a maximum number of research groups working in fundamental virology to promote interaction, exchange of ideas, and collaborations in an informal and collegial atmosphere. </p>
-
-        <p>The program will cover all aspects of research in fundamental virology including virus life cycle, virus discovery and evolution, virus and host defense, and clinical virology. The format of the meeting will consist in selected plenary lectures combined with short talks selected from submitted abstracts and poster sessions.</p>
-
-        <p>The meeting webpage for registration and abstract submission will be open soon.</p>
-
-        <p>Thank you for your active participation and we are looking forward to seeing you in Bern. </p>
-
-  <p>Sincerely,</p>
-
-<p>
-<br/><div style="font-size:small;Font-Weight:Bold;" >Organizing and Scientific Committee</div>
-  <ul style="list-style-type: none;font-size:x-small;">
-    <li>Angela Ciuffi (University of Lausanne)</li>
-    <li>Charaf Benarafa (University of Bern)</li>
-    <li>Cornel Fraefel (University of Zurich)</li>
-    <li>Catherine Eichwald (University of Zurich)</li>
-    <li>Jérôme Gouttenoire (University of Lausanne)</li>
-    <li>Ben Hale (University of Zurich)</li>
-    <li>Philippe Plattet (University of Bern)</li>
-    <li>Mirco Schmolke (University of Geneva)</li>
-    <li>Matthias Schweizer (University of Bern)</li>
-    <li>Silke Stertz (University of Zurich)</li>
-    <li>Caroline Tapparel Vu (University of Geneva)</li>
-    <li>Volker Thiel (University of Bern)</li>
-  </ul>
-</p>
-<br/>
-<br/>
-<br/>
-<br/>
-<h2 id="general" class="bg-info">General Information</h2>
-
-<h4>Swiss Virology Meeting, January 26 & 27, 2027, Bern, Switzerland</h4>
-
-<dl class="dl-horizontal">
-  <dt>Scope:</dt><dd>Basic and applied virology</dd>
-  <dt>Date:</dt><dd>January 26 & 27, 2027</dd>
-  <dd>Tuesday January 26, 2027: 10:00 - 21:00</dd>
-  <dd>Wednesday January 27, 2027: 9:00 - 16:30</dd>
-  <dt>Location:</dt><dd><a href="https://fassbindhotels.ch/fr/hotel/ambassador-spa-bern/"> Ambassador Hotel</a>, Seftigenstrasse 99, 3007 Bern - SWITZERLAND
-(Tel. 031/370.99.99)</dd>
-
-  <dt>Registration fees:</dt><dd>CHF 275.- for PhD students (MSc, PhD, MD, other)</dd>
-  <dd>CHF 400.- for Research Technicians, Post-docs and Principal Investigators</dd>
-  <dd>The registration fee includes meeting registration, accommodation and all meals.</dd>
-  <dd>(Cancellation policy: no reimbursement possible)</dd>
-  <dt>Contact:</dt><dd>contact@swissvirology.ch</dd>
-
-<br/>
-
-<h4>Oral Presentations</h4>
-
-<ul style="list-style-type: none;">
-
-<li>Plenary talk Swiss Virology abroad : 45 minutes (35 minutes + 10 minutes discussion)</li>
-<li>Plenary talks (senior group leaders) : 30 minutes (25 minutes + 5 minutes discussion)</li>
-<li>Short talks (from selected abstracts) : 15 minutes (12 minutes + 3 minutes discussion)</li>
-</ul>
-  
-<br/>
-  
-<h4>Poster sessions</h4>
-<p>
-Two poster sessions will be held during coffee breaks. Posters will be presented by postdocs and graduate students. To ensure maximum visibility of posters, all posters will stay mounted throughout the meeting. Poster size: 90 cm wide x 120 cm high.
-</p>
-    
-<br/>
-  
-<h4>Organizing and scientific committee <small>(in alphabetical order)</small> </h4>
- <ul style="list-style-type: none;">
-    <li>Angela Ciuffi (University of Lausanne)</li>
-    <li>Charaf Benarafa (University of Bern)</li>
-    <li>Cornel Fraefel (University of Zurich)</li>
-    <li>Catherine Eichwald (University of Zurich)</li>
-    <li>Jérôme Gouttenoire (University of Lausanne)</li>
-    <li>Ben Hale (University of Zurich)</li>
-    <li>Philippe Plattet (University of Bern)</li>
-    <li>Mirco Schmolke (University of Geneva)</li>
-    <li>Matthias Schweizer (University of Bern)</li>
-    <li>Silke Stertz (University of Zurich)</li>
-    <li>Caroline Tapparel Vu (University of Geneva)</li>
-    <li>Volker Thiel (University of Bern)</li>
-</ul>
-
-<br/>
-
-<h4>Steering Committee</h4>
-<ul style="list-style-type: none;">
-  <li>Angela Ciuffi (University of Lausanne)</li>
-  <li>Charaf Benarafa (University of Bern)</li>
-  <li>Cornel Fraefel (University of Zurich)</li>
-  <li>Jérôme Gouttenoire (University of Lausanne)</li>
-  <li>Matthias Schweizer (University of Bern)</li>
-  <li>Caroline Tapparel Vu (University of Geneva)</li>
-</ul>
-<br/>
-<br/>
-<br/>
-<br/>
-
-<!-- Program -->
-
-<h2 id="program" class="bg-info">Program of the 11th Swiss Virology Meeting January 26 & 27, 2027, Bern</h2>
-<h4>Tuesday, January 26, 2027 </h4>
-<dl class="dl-horizontal">
-  <dt style="background-color: #FFFF00";>10:00 – 10:25</dt>
-    <dd style="background-color: #FFFF00";>Arrival, registration and Welcome Coffee</dd>
-  <br/>
-  <dt style="background-color: #FFFF00";>10:25 – 10:30</dt>
-    <dd style="background-color: #FFFF00";> Welcome Address   </dd>
-    <dd><em>Steering committee member TBA</em></dd>
-  <br/>
-  <dt><strong><font color="#E83C1A">10:30 – 12:00</font></strong></dt>
-  <dd><strong><font color="#E83C1A">PLENARY TALKS (CUSO)</font></strong></dd>
-    <dd><em>Introduction:</em> Steering committee member TBA</dd>
-  <br/>
-  <dt>10:30 – 11:15</dt>
-    <dd><strong>First Invited Keynote Lecture</strong><em> – </em> (Abstract Nr)</dd>
-    <dd>Title to be announced</dd>
-  <br/>
-  <dt>11:15 – 12:00</dt>
-    <dd><strong>Nora Schmidt</strong><em> – Hannover Medical School, Germany </em> (Abstract Nr)</dd>
-    <dd>Deciphering the role of RNA-protein interactions in viral disease mechanisms and antiviral defense processes in RSV and HSV-1 infections</dd>
-  <br/>
-  <br/>
-  <dt style="background-color: #FFFF00";>12:00 – 14:00</dt>
-    <dd style="background-color: #FFFF00";>Lunch and Poster Viewing</dd>
-    <dd>Round-table discussion of Ph.D students & postdocs with Invited Keynote Speakers</dd>
-  <br/>
-  <br/>
-  <dt><strong><font color="#E83C1A">14:00 – 14:30</font></strong></dt>
-  <dd><strong><font color="#E83C1A">STUDENT SESSION (CUSO): Session from and by the students</font></strong></dd>
-    <dd><em>Chairs:</em> Committee of PhD students</dd>
-  <br/>
-  <dt>14:00 – 14:15</dt>
-    <dd><strong>Selected talk from abstracts</strong><em> – </em> (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>14:15 – 14:30</dt>
-    <dd><strong>Selected talk from abstracts</strong><em> – </em> (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <br/>
-  <dt><strong><font color="#E83C1A">14:30 – 16:30</font></strong></dt>
-    <dd><strong><font color="#E83C1A">SESSION I: VIRUS-HOST INTERACTIONS: THE VIRUS SIDE</font></strong></dd>
-    <dd><em>Chairs:</em> Two scientific committee members, TBA</dd>
-  <br/>
-  <dt>14:30 – 15:00</dt>
-    <dd><strong>Mandy Muller</strong><em> – Lausanne University Hospital</em> (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>15:00 – 15:30</dt>
-    <dd><strong>Selected talk from abstracts</strong><em> – </em> (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>15:30 – 15:45</dt>
-    <dd><strong>Selected talk from abstracts</strong><em> – </em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>15:45 – 16:00</dt>
-    <dd><strong>Selected talk from abstracts</strong><em> – </em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>16:00 – 16:15</dt>
-    <dd><strong>Selected talk from abstracts</strong><em> – </em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>16:15 – 16:30</dt>
-    <dd><strong>Selected talk from abstracts</strong><em> – </em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <br/>
-  <dt style="background-color: #FFFF00";>16:30 – 17:00</dt>
-    <dd style="background-color: #FFFF00";>Coffee Break</dd>
-  <br/>
-  <dt><strong><font color="#E83C1A">17:00 – 19:00</font></strong></dt>
-    <dd><strong><font color="#E83C1A">POSTER SESSION</font></strong></dd>
-  <br/>
-  <dt style="background-color: #FFFF00";>19:00 – 21:00</dt>
-    <dd style="background-color: #FFFF00";>Dinner and Poster Viewing</dd>
-</dl>
-  <br/>
-  <br/>
-
-<h4>Wednesday, January 27, 2027</h4>
-<dl class="dl-horizontal">
-  <dt style="background-color: #FFFF00";>07:30 – 08:45</dt>
-    <dd style="background-color: #FFFF00";>Breakfast (at hotel)</dd>
-  <br/>
-  <dt><strong><font color="#E83C1A">09:00 – 11:00</font></strong></dt>
-   <dd><strong><font color="#E83C1A">SESSION II: 	VIRUS-HOST INTERACTIONS: THE HOST SIDE</font></strong></dd>
-    <dd><em>Chairs:</em> Two scientific committee members, TBA</dd>
-  <br/>
-  <dt>9:00 – 9:30</dt>
-    <dd><strong>Ella Hartenian</strong><em> – University of Lausanne</em> (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>9:30 – 10:00</dt>
-    <dd><strong>Santiago Gonzalez</strong><em> – Institute for Research in Biomedicine</em> (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>10:00 – 10:15</dt>
-    <dd><strong>Selected talk from abstracts</strong><em></em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>10:15 – 10:30</dt>
-    <dd><strong>Selected talk from abstracts</strong><em></em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>10:30 – 10:45</dt>
-    <dd><strong>Selected talk from abstracts</strong><em></em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>10:45 – 11:00</dt>
-    <dd><strong>Selected talk from abstracts</strong><em></em> – (Abstract Nr)</dd>
-    <dd>TBAs</dd>
-  <br/>
-  <br/>
-  <dt style="background-color: #FFFF00";>11:00 – 11:30</dt>
-    <dd style="background-color: #FFFF00";>Coffee Break</dd>
-  <br/>
-  <dt><strong><font color="#E83C1A">11:30 – 12:30</font></strong></dt>
-    <dd><strong><font color="#E83C1A">POSTER SESSION</font></strong></dd>
-  <br/>
-  <dt style="background-color: #FFFF00";>12:30 – 14:00</dt>
-    <dd style="background-color: #FFFF00";>Lunch and Poster Viewing</dd>
-  <br/>
-  <br/>
-  <dt><strong><font color="#E83C1A">14:00 – 16:00</font></strong></dt>
-    <dd><strong><font color="#E83C1A">SESSION III: 	CLINICAL VIROLOGY: VACCINES AND ANTIVIRALS</font></strong></dd>
-    <dd><em>Chairs:</em> Two scientific committee members, TBA</dd>
-  <br/>
-  <dt>14:00 – 14:30</dt>
-    <dd><strong>Benjamin Meyer</strong><em> – University of Geneva</em> (Abstract Nr))</dd>
-    <dd>Cross-reactive antibody responses to highly pathogenic avian H5N1 influenza viruses</dd>
-  <br/>
-  <dt>14:30 – 15:00</dt>
-    <dd><strong>Davide Robbiani</strong><em> – Institute for Research in Biomedicine</em> (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>15:00 – 15:15</dt>
-    <dd><strong>Selected talk from abstracts</strong><em></em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>15:15 – 15:30</dt>
-    <dd><strong>Selected talk from abstracts</strong><em></em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>15:30 – 15:45</dt>
-    <dd><strong>Selected talk from abstracts</strong><em></em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt>15:45 – 16:00</dt>
-    <dd><strong>Selected talk from abstracts</strong><em></em> – (Abstract Nr)</dd>
-    <dd>TBA</dd>
-  <br/>
-  <dt><strong><font color="#E83C1A">16:00 – 16:30</font></strong></dt>
-    <dd><strong><font color="#E83C1A">CLOSING LECTURE</font></strong></dd>
-    <dd><em>Chair:</em>TBA</dd>
-  <br/>
-    <dd><strong>Mirco Schmolke</strong><em>  –  University of Geneva</em></dd>
-    <dd>TBA</dd>
-  <br/>
-  <br/>
-  <dt style="background-color: #FFFF00";>16:30 – 16:45</dt>
-    <dd style="background-color: #FFFF00";>Farewell Address</dd>
-  <br/>
-
-</dl>
-
-<br/>
-<br/>
-<br/>
-<br/>
-<!-- Registration -->
-
-<h2 id="registration" class="bg-info">Registration</h2>
-<h4>With the link below, you will be redirected to the University of Zurich for the registration, this should take only a few seconds.</h4>
-
-  <br/>
- <button type="button" class="btn btn-primary"><font color="#ffffff"><a href="https://www.vetvir.uzh.ch/de/impressum/Registration-11th-SVM.html" style="color:#ffffff">Register now</a></font></button>
-  <p>(If the above button does not work, please use Google Chrome or copy the link below : <br/>
-    https://www.vetvir.uzh.ch/de/impressum/Registration-10th-SVM.html  )</p>
-  <br/>
-  <p>Reminder: Registration opens on October 1, 2026. Deadline for registration and abstract submission is November 1, 2026.</p>
-
-
-<br/>
-<br/>
-
-
-<footer>
-  <h2 id="previous" class="bg-info">Previous Meetings</h2>
-    <div>
-      <a href="/2009_SWFV.pdf"><img src="/1st SVM.jpg" style="width:360px"/></a>
-      <a href="/2010_SWFV.pdf"><img src="/2nd SVM.jpg" style="width:360px"/></a>
-      <a href="/2011_SWFV.pdf"><img src="/3rd SVM.jpg" style="width:360px"/></a>
+    <div class="hero">
+      <div class="wrap">
+        <div class="hero-logo">
+          <img src="/11th SVM logo.png" alt="11th Swiss Virology Meeting logo">
+        </div>
+        <div class="hero-text">
+          <h1>Swiss Virology Meeting</h1>
+          <div class="hero-rule"></div>
+          <p class="contact">Contact: <a href="mailto:contact@swissvirology.ch">contact@swissvirology.ch</a></p>
+        </div>
+      </div>
     </div>
 
-    <div class="row">
-      <a href="/2013_SVM.pdf"><img src="/4th SVM.jpg" style="width:360px"/></a>
-      <a href="/2014_SVM.pdf"><img src="/5th SVM.jpg" style="width:360px"/></a>
-      <a href="/2016_SVM.pdf"><img src="/6th SVM.jpg" style="width:360px"/></a>
-    </div>
+    <main class="wrap">
 
-    <div class="row">
-      <a href="/2018_SVM.pdf"><img src="/7th SVM.jpg" style="width:360px"/></a>
-      <a href="/2020_SVM.pdf"><img src="/8th SVM logo.PNG" style="width:360px"/></a>
-      <a href="/2023_SVM.pdf"><img src="/9th SVM logo2.png" style="width:360px"/></a>
-    </div>
-  
-    <div class="row">
-      <a href="/2025_SVM.pdf"><img src="/10th SVM logo.png" style="width:360px"/></a>
-    </div>
-  </p>
-  <br/>
-  <br/>
-  <br/>
-</footer>
+      <!-- Welcome -->
+      <section id="welcome">
+        <h1 class="section-title">Welcome!</h1>
+
+        <div class="lead">
+          <p>Dear Colleagues,</p>
+
+          <p>On behalf of the Organizing Committee, we cordially invite you to participate to the 11th Swiss Virology Meeting that will be held from January 26<sup>th</sup> to January 27<sup>th</sup>, 2027 at the <a href="https://fassbindhotels.ch/fr/hotel/ambassador-spa-bern/">Ambassador Hotel</a> in Bern, Switzerland.</p>
+
+          <p>The goal of this eleventh national meeting in virology is again to bring together in Switzerland a maximum number of research groups working in fundamental virology to promote interaction, exchange of ideas, and collaborations in an informal and collegial atmosphere.</p>
+
+          <p>The program will cover all aspects of research in fundamental virology including virus life cycle, virus discovery and evolution, virus and host defense, and clinical virology. The format of the meeting will consist in selected plenary lectures combined with short talks selected from submitted abstracts and poster sessions.</p>
+
+          <p>The meeting webpage for registration and abstract submission will be open soon.</p>
+
+          <p>Thank you for your active participation and we are looking forward to seeing you in Bern.</p>
+
+          <p class="signoff">Sincerely,</p>
+        </div>
+
+        <div class="people-block">
+          <h4>Organizing and Scientific Committee</h4>
+          <ul class="people">
+            <li>Angela Ciuffi (University of Lausanne)</li>
+            <li>Charaf Benarafa (University of Bern)</li>
+            <li>Cornel Fraefel (University of Zurich)</li>
+            <li>Catherine Eichwald (University of Zurich)</li>
+            <li>Jérôme Gouttenoire (University of Lausanne)</li>
+            <li>Ben Hale (University of Zurich)</li>
+            <li>Philippe Plattet (University of Bern)</li>
+            <li>Mirco Schmolke (University of Geneva)</li>
+            <li>Matthias Schweizer (University of Bern)</li>
+            <li>Silke Stertz (University of Zurich)</li>
+            <li>Caroline Tapparel Vu (University of Geneva)</li>
+            <li>Volker Thiel (University of Bern)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- General information -->
+      <section id="general">
+        <h2 class="section-title">General Information</h2>
+
+        <h3 class="sub">Swiss Virology Meeting, January 26 &amp; 27, 2027, Bern, Switzerland</h3>
+
+        <dl class="facts">
+          <dt>Scope:</dt>
+          <dd>Basic and applied virology</dd>
+
+          <dt>Date:</dt>
+          <dd>
+            January 26 &amp; 27, 2027<br>
+            Tuesday January 26, 2027: 10:00 - 21:00<br>
+            Wednesday January 27, 2027: 9:00 - 16:30
+          </dd>
+
+          <dt>Location:</dt>
+          <dd><a href="https://fassbindhotels.ch/fr/hotel/ambassador-spa-bern/">Ambassador Hotel</a>, Seftigenstrasse 99, 3007 Bern - SWITZERLAND (Tel. 031/370.99.99)</dd>
+
+          <dt>Registration fees:</dt>
+          <dd>
+            CHF 275.- for PhD students (MSc, PhD, MD, other)<br>
+            CHF 400.- for Research Technicians, Post-docs and Principal Investigators<br>
+            <span class="note">The registration fee includes meeting registration, accommodation and all meals.<br>
+            (Cancellation policy: no reimbursement possible)</span>
+          </dd>
+
+          <dt>Contact:</dt>
+          <dd><a href="mailto:contact@swissvirology.ch">contact@swissvirology.ch</a></dd>
+        </dl>
+
+        <h3 class="sub">Oral Presentations</h3>
+        <ul class="plain">
+          <li>Plenary talk Swiss Virology abroad : 45 minutes (35 minutes + 10 minutes discussion)</li>
+          <li>Plenary talks (senior group leaders) : 30 minutes (25 minutes + 5 minutes discussion)</li>
+          <li>Short talks (from selected abstracts) : 15 minutes (12 minutes + 3 minutes discussion)</li>
+        </ul>
+
+        <h3 class="sub">Poster sessions</h3>
+        <p>Two poster sessions will be held during coffee breaks. Posters will be presented by postdocs and graduate students. To ensure maximum visibility of posters, all posters will stay mounted throughout the meeting. Poster size: 90 cm wide x 120 cm high.</p>
+
+        <div class="people-block">
+          <h4>Organizing and scientific committee <small>(in alphabetical order)</small></h4>
+          <ul class="people">
+            <li>Angela Ciuffi (University of Lausanne)</li>
+            <li>Charaf Benarafa (University of Bern)</li>
+            <li>Cornel Fraefel (University of Zurich)</li>
+            <li>Catherine Eichwald (University of Zurich)</li>
+            <li>Jérôme Gouttenoire (University of Lausanne)</li>
+            <li>Ben Hale (University of Zurich)</li>
+            <li>Philippe Plattet (University of Bern)</li>
+            <li>Mirco Schmolke (University of Geneva)</li>
+            <li>Matthias Schweizer (University of Bern)</li>
+            <li>Silke Stertz (University of Zurich)</li>
+            <li>Caroline Tapparel Vu (University of Geneva)</li>
+            <li>Volker Thiel (University of Bern)</li>
+          </ul>
+        </div>
+
+        <div class="people-block">
+          <h4>Steering Committee</h4>
+          <ul class="people">
+            <li>Angela Ciuffi (University of Lausanne)</li>
+            <li>Charaf Benarafa (University of Bern)</li>
+            <li>Cornel Fraefel (University of Zurich)</li>
+            <li>Jérôme Gouttenoire (University of Lausanne)</li>
+            <li>Matthias Schweizer (University of Bern)</li>
+            <li>Caroline Tapparel Vu (University of Geneva)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Program -->
+      <section id="program">
+        <h2 class="section-title">Program of the 11th Swiss Virology Meeting January 26 &amp; 27, 2027, Bern</h2>
+
+        <h3 class="day">Tuesday, January 26, 2027</h3>
+        <div class="schedule">
+
+          <div class="slot break">
+            <div class="time">10:00 – 10:25</div>
+            <div class="detail"><span class="what">Arrival, registration and Welcome Coffee</span></div>
+          </div>
+
+          <div class="slot break">
+            <div class="time">10:25 – 10:30</div>
+            <div class="detail">
+              <span class="what">Welcome Address</span>
+              <p class="meta"><em>Steering committee member TBA</em></p>
+            </div>
+          </div>
+
+          <div class="slot session">
+            <div class="time">10:30 – 12:00</div>
+            <div class="detail">
+              <span class="session-name">PLENARY TALKS (CUSO)</span>
+              <p class="meta"><em>Introduction:</em> Steering committee member TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">10:30 – 11:15</div>
+            <div class="detail">
+              <span class="name">First Invited Keynote Lecture</span> <span class="affil">–</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">Title to be announced</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">11:15 – 12:00</div>
+            <div class="detail">
+              <span class="name">Nora Schmidt</span> <span class="affil">– Hannover Medical School, Germany</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">Deciphering the role of RNA-protein interactions in viral disease mechanisms and antiviral defense processes in RSV and HSV-1 infections</p>
+            </div>
+          </div>
+
+          <div class="slot break">
+            <div class="time">12:00 – 14:00</div>
+            <div class="detail">
+              <span class="what">Lunch and Poster Viewing</span>
+              <p class="meta">Round-table discussion of Ph.D students &amp; postdocs with Invited Keynote Speakers</p>
+            </div>
+          </div>
+
+          <div class="slot session">
+            <div class="time">14:00 – 14:30</div>
+            <div class="detail">
+              <span class="session-name">STUDENT SESSION (CUSO): Session from and by the students</span>
+              <p class="meta"><em>Chairs:</em> Committee of PhD students</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">14:00 – 14:15</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="affil">–</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">14:15 – 14:30</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="affil">–</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot session">
+            <div class="time">14:30 – 16:30</div>
+            <div class="detail">
+              <span class="session-name">SESSION I: VIRUS-HOST INTERACTIONS: THE VIRUS SIDE</span>
+              <p class="meta"><em>Chairs:</em> Two scientific committee members, TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">14:30 – 15:00</div>
+            <div class="detail">
+              <span class="name">Mandy Muller</span> <span class="affil">– Lausanne University Hospital</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">15:00 – 15:30</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="affil">–</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">15:30 – 15:45</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="affil">– –</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">15:45 – 16:00</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="affil">– –</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">16:00 – 16:15</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="affil">– –</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">16:15 – 16:30</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="affil">– –</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot break">
+            <div class="time">16:30 – 17:00</div>
+            <div class="detail"><span class="what">Coffee Break</span></div>
+          </div>
+
+          <div class="slot session">
+            <div class="time">17:00 – 19:00</div>
+            <div class="detail"><span class="session-name">POSTER SESSION</span></div>
+          </div>
+
+          <div class="slot break">
+            <div class="time">19:00 – 21:00</div>
+            <div class="detail"><span class="what">Dinner and Poster Viewing</span></div>
+          </div>
 
         </div>
+
+        <h3 class="day">Wednesday, January 27, 2027</h3>
+        <div class="schedule">
+
+          <div class="slot break">
+            <div class="time">07:30 – 08:45</div>
+            <div class="detail"><span class="what">Breakfast (at hotel)</span></div>
+          </div>
+
+          <div class="slot session">
+            <div class="time">09:00 – 11:00</div>
+            <div class="detail">
+              <span class="session-name">SESSION II: VIRUS-HOST INTERACTIONS: THE HOST SIDE</span>
+              <p class="meta"><em>Chairs:</em> Two scientific committee members, TBA</p>
             </div>
+          </div>
 
+          <div class="slot">
+            <div class="time">9:00 – 9:30</div>
+            <div class="detail">
+              <span class="name">Ella Hartenian</span> <span class="affil">– University of Lausanne</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
 
+          <div class="slot">
+            <div class="time">9:30 – 10:00</div>
+            <div class="detail">
+              <span class="name">Santiago Gonzalez</span> <span class="affil">– Institute for Research in Biomedicine</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
 
+          <div class="slot">
+            <div class="time">10:00 – 10:15</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="abstract-nr">– (Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
 
+          <div class="slot">
+            <div class="time">10:15 – 10:30</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="abstract-nr">– (Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
 
+          <div class="slot">
+            <div class="time">10:30 – 10:45</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="abstract-nr">– (Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
 
+          <div class="slot">
+            <div class="time">10:45 – 11:00</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="abstract-nr">– (Abstract Nr)</span>
+              <p class="title">TBAs</p>
+            </div>
+          </div>
 
+          <div class="slot break">
+            <div class="time">11:00 – 11:30</div>
+            <div class="detail"><span class="what">Coffee Break</span></div>
+          </div>
 
-    </div> <!-- /container -->
+          <div class="slot session">
+            <div class="time">11:30 – 12:30</div>
+            <div class="detail"><span class="session-name">POSTER SESSION</span></div>
+          </div>
 
+          <div class="slot break">
+            <div class="time">12:30 – 14:00</div>
+            <div class="detail"><span class="what">Lunch and Poster Viewing</span></div>
+          </div>
 
+          <div class="slot session">
+            <div class="time">14:00 – 16:00</div>
+            <div class="detail">
+              <span class="session-name">SESSION III: CLINICAL VIROLOGY: VACCINES AND ANTIVIRALS</span>
+              <p class="meta"><em>Chairs:</em> Two scientific committee members, TBA</p>
+            </div>
+          </div>
 
+          <div class="slot">
+            <div class="time">14:00 – 14:30</div>
+            <div class="detail">
+              <span class="name">Benjamin Meyer</span> <span class="affil">– University of Geneva</span> <span class="abstract-nr">(Abstract Nr))</span>
+              <p class="title">Cross-reactive antibody responses to highly pathogenic avian H5N1 influenza viruses</p>
+            </div>
+          </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>    <!-- Include all compiled plugins (below), or include individual files as needed -->    <script src="js/bootstrap.min.js"></script>
+          <div class="slot">
+            <div class="time">14:30 – 15:00</div>
+            <div class="detail">
+              <span class="name">Davide Robbiani</span> <span class="affil">– Institute for Research in Biomedicine</span> <span class="abstract-nr">(Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
 
+          <div class="slot">
+            <div class="time">15:00 – 15:15</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="abstract-nr">– (Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">15:15 – 15:30</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="abstract-nr">– (Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">15:30 – 15:45</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="abstract-nr">– (Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time">15:45 – 16:00</div>
+            <div class="detail">
+              <span class="name">Selected talk from abstracts</span> <span class="abstract-nr">– (Abstract Nr)</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot session">
+            <div class="time">16:00 – 16:30</div>
+            <div class="detail">
+              <span class="session-name">CLOSING LECTURE</span>
+              <p class="meta"><em>Chair:</em> TBA</p>
+            </div>
+          </div>
+
+          <div class="slot">
+            <div class="time"></div>
+            <div class="detail">
+              <span class="name">Mirco Schmolke</span> <span class="affil">– University of Geneva</span>
+              <p class="title">TBA</p>
+            </div>
+          </div>
+
+          <div class="slot break">
+            <div class="time">16:30 – 16:45</div>
+            <div class="detail"><span class="what">Farewell Address</span></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Registration -->
+      <section id="registration">
+        <h2 class="section-title">Registration</h2>
+
+        <div class="reg-card">
+          <p>With the link below, you will be redirected to the University of Zurich for the registration, this should take only a few seconds.</p>
+
+          <a class="btn" href="https://www.vetvir.uzh.ch/de/impressum/Registration-11th-SVM.html">Register now</a>
+
+          <p class="fallback">(If the above button does not work, please use Google Chrome or copy the link below :<br>
+            <code>https://www.vetvir.uzh.ch/de/impressum/Registration-10th-SVM.html</code> )</p>
+        </div>
+
+        <p class="deadline">Reminder: Registration opens on October 1, 2026. Deadline for registration and abstract submission is November 1, 2026.</p>
+      </section>
+
+      <!-- Previous meetings -->
+      <section id="previous">
+        <h2 class="section-title">Previous Meetings</h2>
+
+        <ul class="archive">
+          <li><a href="/2009_SWFV.pdf"><img src="/1st SVM.jpg" alt="1st Swiss Virology Meeting"></a></li>
+          <li><a href="/2010_SWFV.pdf"><img src="/2nd SVM.jpg" alt="2nd Swiss Virology Meeting"></a></li>
+          <li><a href="/2011_SWFV.pdf"><img src="/3rd SVM.jpg" alt="3rd Swiss Virology Meeting"></a></li>
+          <li><a href="/2013_SVM.pdf"><img src="/4th SVM.jpg" alt="4th Swiss Virology Meeting"></a></li>
+          <li><a href="/2014_SVM.pdf"><img src="/5th SVM.jpg" alt="5th Swiss Virology Meeting"></a></li>
+          <li><a href="/2016_SVM.pdf"><img src="/6th SVM.jpg" alt="6th Swiss Virology Meeting"></a></li>
+          <li><a href="/2018_SVM.pdf"><img src="/7th SVM.jpg" alt="7th Swiss Virology Meeting"></a></li>
+          <li><a href="/2020_SVM.pdf"><img src="/8th SVM logo.PNG" alt="8th Swiss Virology Meeting"></a></li>
+          <li><a href="/2023_SVM.pdf"><img src="/9th SVM logo2.png" alt="9th Swiss Virology Meeting"></a></li>
+          <li><a href="/2025_SVM.pdf"><img src="/10th SVM logo.png" alt="10th Swiss Virology Meeting"></a></li>
+        </ul>
+      </section>
+
+    </main>
+
+    <footer class="page-foot">
+      <div class="wrap">
+        <span>Swiss Virology Meeting</span>
+        <span>Contact: <a href="mailto:contact@swissvirology.ch">contact@swissvirology.ch</a></span>
+      </div>
+    </footer>
   </body>
 </html>
